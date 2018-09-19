@@ -2,7 +2,7 @@
      <div>
           <ul  class="list--resume">
                <li v-for="task in tarefas" :key="task.index">
-                    {{ task.taskText }}, {{task.isDone}}
+                    {{ task.text }}, {{task.isDone}}
                </li>
           </ul>
      </div>

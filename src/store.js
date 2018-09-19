@@ -8,9 +8,9 @@ export default new Vuex.Store({
      state: {
           title: 'My custom title',
           tasks: [
-               { taskText: 'Levar o lixo', isDone: false},
-               { taskText: 'Lavar a louça', isDone: false},
-               { taskText: 'Passar vassoura', isDone: false},
+               { text: '0 Levar o lixo', isDone: false},
+               { text: '1 Lavar a louça', isDone: false},
+               { text: '2 Passar vassoura', isDone: false},
           ],
      },
      getters: {
