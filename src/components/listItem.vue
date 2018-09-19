@@ -30,9 +30,12 @@
 		},
 		watch: {
 			checkBox () {				
-				console.log('watch CheckBox: ', this.checkBox)
-				
-				this.updateStatus(this.taskIndex, this.checkBox)
+				// console.log('watch CheckBox: ', this.checkBox)
+
+				var 	index = this.taskIndex,
+					checkBox = this.checkBox
+				this.$store.commit('UPDATE_TASK_STATUS', {index, checkBox})
+
 			}
 		},
 		methods: {

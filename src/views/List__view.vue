@@ -4,10 +4,8 @@
           <div class="container">
                 <ul class="list--wrapper">
 				<li v-for="(task, index) in tasks" :key="task.index">
-					<list-item :taskText="task.taskText" :modelo="task.index" :taskIndex="index"/>
-				<!-- <button @click="removeTasks(index)">
-					<i class="far fa-trash-alt"></i>
-				</button> -->
+					<!-- <list-item :taskText="task.taskText" :modelo="task.index" :taskIndex="index"/> -->
+					<list-item :task="task" :index="index"/>
 				</li>
                 </ul>
                <form @submit.prevent="addTask" class="list__item--wrapper">

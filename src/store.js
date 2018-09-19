@@ -25,9 +25,9 @@ export default new Vuex.Store({
           REMOVE_TASK: (state, index) => {
               state.tasks.splice(index, 1)
 		},
-		UPDATE_TASK_STATUS: (stage, index, done) => {
-			console.log('UPDATE_TASK_STATUS - index: ', index, 'done: ', done);
-			stage.tasks[index].isDone = done
+		UPDATE_TASK_STATUS: (stage, payload) => {
+			// console.log('UPDATE_TASK_STATUS - index: ', payload.index, 'done: ', payload.checkBox);
+			stage.tasks[payload.index].isDone = payload.checkBox
 		}
      },
      actions: {
@@ -35,7 +35,7 @@ export default new Vuex.Store({
 			context.commit('REMOVE_TASK', index)
 		},
 		updateStatus: (context, index, done) => {
-			console.log('updateStatus - index: ', index, 'done: ', done);
+			//console.log('updateStatus - index: ', index, 'done: ', done);
 			context.commit('UPDATE_TASK_STATUS', index, done)
 		}
      }
