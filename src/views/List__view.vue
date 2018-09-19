@@ -14,6 +14,7 @@
                     <input type="text" placeholder="adicionar tarefa" v-model="newTask">
                </form>
                <p class="task__counter">existe {{ countTasks }} tarefas</p>
+			<list-resume/>
           </div>
      </div>
 </template>
@@ -22,13 +23,15 @@
 //criar whatch do chack bom
      import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
      import listHeader from '@/components/listHeader'
-     import listItem from '@/components/listItem'
+	import listItem from '@/components/listItem'
+	import listResume from '@/components/listResume'
 
      export default {
 		name: 'listView',
 		components: {
 			listHeader,
-			listItem
+			listItem,
+			listResume
 		},
 		data() {
 			return {
