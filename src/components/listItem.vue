@@ -1,19 +1,15 @@
 <template>
-     <div class="list__item--wrapper">
-          <div class="row justify-content-center">
-               <div class="col-1">
-                    <!-- <input type="radio" name="isDone" > -->
-                    <input type="checkbox" name="isDone" :v-model="modelo">
-                    <!-- v-model = tasks[index] -->
-               </div>
-               <div class="col-8">
-                    <input type="text" :value="taskText">
-               </div>
-               <div class="col-1">
-                    <i class="far fa-trash-alt"></i>
-               </div>
-          </div>
-     </div>
+     <!--<div class="list__item- -wrapper">
+             <div class="row justify-content-center">
+                <div class="col-1">
+                        <input type="checkbox" name="isDone" :v-model="modelo">
+                </div>
+                <div class="col-8">
+                        <input type="text" :value="taskText">
+                </div>
+            </div> 
+     </div>-->
+            <input type="text" :value="taskText">
 </template>
 
 <script>

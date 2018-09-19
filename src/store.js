@@ -21,9 +21,14 @@ export default new Vuex.Store({
      mutations: {
           ADD_TASK: (state, task) => {
                state.tasks.push(task)
+          },
+          REMOVE_TASK: (state, index) => {
+              state.tasks.splice(index, 1)
           }
      },
      actions: {
-
+        removeTask: (context, index) => {
+            context.commit('REMOVE_TASK', index)
+        }
      }
 })
