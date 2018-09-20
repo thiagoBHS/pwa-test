@@ -13,7 +13,6 @@
                </form>
 			<button @click="toogleMe">toogle me</button>
                <p class="task__counter" v-if="isTrue">existe {{ countTasks }} tarefas</p>
-			<list-resume/>
           </div>
      </div>
 </template>
@@ -23,19 +22,19 @@
      //import { mapMutations, mapActions } from "vuex";
      import listHeader from '@/components/listHeader'
 	import listItem from '@/components/listItem'
-	import listResume from '@/components/listResume'
+
+	//import firestore from '../firebase.js'
 
      export default {
 		name: 'listView',
 		components: {
 			listHeader,
 			listItem,
-			listResume
 		},
 		data() {
 			return {
 				newTask: '',
-				tasks: this.$store.state.tasks
+				//tasks: this.$store.state.tasks,
 			}
 		},
           computed: {
@@ -44,6 +43,9 @@
 			},
 			isTrue () {
 				return this.$store.getters.isTrue
+			},
+			tasks () {
+				return this.$store.getters.tasks
 			}
 		},
 		methods: {
@@ -59,7 +61,21 @@
 			}
 		},
 		created () {
-			this.$store.dispatch('getFirebaseDatabase')
+			this.$store.dispatch('getFirestoreDB')
+			/*
+			firestore.database.collection('minhas-tarefas').get().then(querySnaphot => {
+				querySnaphot.forEach( doc => {
+					//console.log(doc.data());
+					const data = {
+						'id': doc.id,
+						'text': doc.data().text,
+						'isDone': doc.data().isDone
+					}
+					console.log(data);
+					this.tarefas.push(data)
+				})
+			})
+			*/
 		}
      }
 </script>

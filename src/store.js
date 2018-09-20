@@ -1,10 +1,10 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import firebase from './firebase'
+import firestore from './firebase'
 
 Vue.use(Vuex)
-Vue.use(firebase)
+Vue.use(firestore)
 
 //export const new Vuex.Store({
 export default new Vuex.Store({
@@ -15,22 +15,27 @@ export default new Vuex.Store({
                { text: '1 Lavar a louça', isDone: false},
                { text: '2 Passar vassoura', isDone: false},
 		],
-		_isTrue: true
+		_isTrue: true,
+		_tasks: []
      },
      getters: {
 		//links
           countTasks: state => {
-               return state.tasks.length
+               return state._tasks.length
 		},
 		//firebase
 		isTrue: state => {
 			return state._isTrue
+		},
+		tasks: state => {
+			//pegar as tarefas do state
+			return state._tasks
 		}
      },
      mutations: {
-		//firebase
-		TOOGLE: function (state, bool) {
-			state._isTrue = bool
+		//firestore
+		GET_TASKS: (state, data) => {
+			state._tasks.push(data)
 		},
 		//links
           ADD_TASK: (state, task) => {
@@ -53,15 +58,20 @@ export default new Vuex.Store({
 			//console.log('updateStatus - index: ', index, 'done: ', done);
 			context.commit('UPDATE_TASK_STATUS', index, done)
 		},
-		//firebase
-		toogle (context) {
-			let temp = !context.state._isTrue
-			firebase.database.ref('settings/setting').set(temp)
-		},
-		getFirebaseDatabase (context) {
-			//reformular para firestore
-			firebase.database.ref('settings/setting').on('value', function (snapshopt) {
-				context.commit('TOOGLE', snapshopt.val())
+		getFirestoreDB (context) {
+			firestore.database.collection('minhas-tarefas').get().then(querySnaphot => {
+				querySnaphot.forEach( doc => {
+					
+					//monta o objetio
+					const data = {
+						'id': doc.id,
+						'text': doc.data().text,
+						'isDone': doc.data().isDone
+					}
+					
+					//chama a Mutation para adicionar o Data
+					context.commit('GET_TASKS', data)
+				})
 			})
 		}
      }
