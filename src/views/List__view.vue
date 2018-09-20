@@ -11,7 +11,8 @@
                <form @submit.prevent="addTask" class="list__item--wrapper">
                     <input type="text" placeholder="adicionar tarefa" v-model="newTask">
                </form>
-               <p class="task__counter">existe {{ countTasks }} tarefas</p>
+			<button @click="toogleMe">toogle me</button>
+               <p class="task__counter" v-if="isTrue">existe {{ countTasks }} tarefas</p>
 			<list-resume/>
           </div>
      </div>
@@ -19,7 +20,7 @@
 
 <script>
 //criar whatch do chack bom
-     import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+     //import { mapMutations, mapActions } from "vuex";
      import listHeader from '@/components/listHeader'
 	import listItem from '@/components/listItem'
 	import listResume from '@/components/listResume'
@@ -33,24 +34,33 @@
 		},
 		data() {
 			return {
-				newTask: ''
+				newTask: '',
+				tasks: this.$store.state.tasks
 			}
 		},
           computed: {
-			...mapState({tasks: 'tasks'}),
-			...mapGetters(['countTasks'])
+			countTasks () {
+				return this.$store.getters.countTasks
+			},
+			isTrue () {
+				return this.$store.getters.isTrue
+			}
 		},
 		methods: {
-			...mapMutations([ 'ADD_TASK' ]),
-			...mapActions([ 'removeTask' ]),
+			toogleMe () {
+				this.$store.dispatch('toogle')
+			},
 			addTask () {
-				this.ADD_TASK({ taskText: this.newTask, isDone: false})
+				this.$store.commit('ADD_TASK',{ text: this.newTask, isDone: false})
 				this.newTask = ''
 			},
 			removeTasks (index) {
-				this.removeTask(index)
+				this.$store.dispatch('removeTask',index)
 			}
-          }
+		},
+		created () {
+			this.$store.dispatch('getFirebaseDatabase')
+		}
      }
 </script>
 
