@@ -1,18 +1,12 @@
 <template>
      <div class="list__header">
-          <h1>{{ custom }}</h1>
+          <h1>Minhas Tarefas</h1>
      </div>
 </template>
      
 <script>
-import { mapState } from 'vuex'
 export default {
      name: 'ListaHeader',
-     computed: {
-          ...mapState({
-               custom: 'title'     
-          })
-     }
 }
 </script>
 

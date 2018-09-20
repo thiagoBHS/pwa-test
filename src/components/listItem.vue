@@ -9,7 +9,7 @@
 				<input type="text" v-model="task.text">
 			</div>
 			<div class="col-auto">
-				<button @click="removeTasks(index)" class="remove__task__btn">
+				<button @click="removeTasks(task.id)" class="remove__task__btn">
 					<i class="far fa-trash-alt"></i>
 				</button>
 			</div>
@@ -18,51 +18,23 @@
 </template>
 
 <script>
-	import { mapActions } from "vuex";
 	export default {
 		name: 'listItem',
 		props: ['task','index'],
 		data() {
 			return {
-				taskText: this.task.text
+				//...
 			}
 		},
 		watch: {
 			taskText () {
-				// this.debounce( function () {
-				// 	console.log('teste');
-				// }, 200)
-					console.log('teste');
+				console.log('teste');
 			}
-			// checkBox () {				
-			// 	var 	index = this.taskIndex,
-			// 		checkBox = this.checkBox
-			// 	this.$store.commit('UPDATE_TASK_STATUS', {index, checkBox})
-			// }
 		},
 		methods: {
-			...mapActions([ 'removeTask','updateStatus' ]),
-			removeTasks (index) {
-				//this.removeTask(index)
-				this.$store.dispatch('removeTask', index)
+			removeTasks (id) {
+				this.$store.dispatch('removeTask',id)
 			},
-			debounce(func, wait, immediate) {
-				var timeout;
-
-				return function executedFunction() {
-					var context = this;
-					var args = arguments;
-						
-					var later = function() {
-						timeout = null;
-						if (!immediate) func.apply(context, args);
-					};
-					var callNow = immediate && !timeout;
-					clearTimeout(timeout);
-					timeout = setTimeout(later, wait);			
-					if (callNow) func.apply(context, args);
-				}
-			}
 		}
 	}
 </script>

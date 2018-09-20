@@ -18,12 +18,8 @@
 </template>
 
 <script>
-//criar whatch do chack bom
-     //import { mapMutations, mapActions } from "vuex";
      import listHeader from '@/components/listHeader'
 	import listItem from '@/components/listItem'
-
-	//import firestore from '../firebase.js'
 
      export default {
 		name: 'listView',
@@ -34,7 +30,6 @@
 		data() {
 			return {
 				newTask: '',
-				//tasks: this.$store.state.tasks,
 			}
 		},
           computed: {
@@ -53,29 +48,12 @@
 				this.$store.dispatch('toogle')
 			},
 			addTask () {
-				this.$store.commit('ADD_TASK',{ text: this.newTask, isDone: false})
+				this.$store.commit('ADD_TASK', this.newTask )
 				this.newTask = ''
-			},
-			removeTasks (index) {
-				this.$store.dispatch('removeTask',index)
 			}
 		},
 		created () {
 			this.$store.dispatch('getFirestoreDB')
-			/*
-			firestore.database.collection('minhas-tarefas').get().then(querySnaphot => {
-				querySnaphot.forEach( doc => {
-					//console.log(doc.data());
-					const data = {
-						'id': doc.id,
-						'text': doc.data().text,
-						'isDone': doc.data().isDone
-					}
-					console.log(data);
-					this.tarefas.push(data)
-				})
-			})
-			*/
 		}
      }
 </script>

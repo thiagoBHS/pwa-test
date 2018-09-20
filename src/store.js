@@ -9,23 +9,13 @@ Vue.use(firestore)
 //export const new Vuex.Store({
 export default new Vuex.Store({
      state: {
-          title: 'My custom title',
-          tasks: [
-               { text: '0 Levar o lixo', isDone: false},
-               { text: '1 Lavar a louça', isDone: false},
-               { text: '2 Passar vassoura', isDone: false},
-		],
-		_isTrue: true,
+		//_isTrue: true,
 		_tasks: []
      },
      getters: {
 		//links
           countTasks: state => {
                return state._tasks.length
-		},
-		//firebase
-		isTrue: state => {
-			return state._isTrue
 		},
 		tasks: state => {
 			//pegar as tarefas do state
@@ -34,18 +24,34 @@ export default new Vuex.Store({
      },
      mutations: {
 		//firestore
+		CLEAR_TASKS: (state) => {
+			state._tasks = []
+		},
 		GET_TASKS: (state, data) => {
 			state._tasks.push(data)
 		},
 		//links
-          ADD_TASK: (state, task) => {
-               state.tasks.push(task)
+          ADD_TASK: (state,task) => {
+			firestore.database.collection("minhas-tarefas").add({
+				text: task,
+				isDone: false
+			})
+			.then(function(docRef) {
+				console.log("Document written with ID: ", docRef.id);
+			})
+			.catch(function(error) {
+				console.error("Error adding document: ", error);
+			});
           },
-          REMOVE_TASK: (state, index) => {
-              state.tasks.splice(index, 1)
+          REMOVE_TASK: (state, id) => {
+			//state.tasks.splice(index, 1)
+			firestore.database.collection("minhas-tarefas").doc(id).delete().then(function() {
+				console.log("Document successfully deleted!");
+			}).catch(function(error) {
+				console.error("Error removing document: ", error);
+			});
 		},
 		UPDATE_TASK_STATUS: (stage, payload) => {
-			// console.log('UPDATE_TASK_STATUS - index: ', payload.index, 'done: ', payload.checkBox);
 			stage.tasks[payload.index].isDone = payload.checkBox
 		}
      },
@@ -59,7 +65,9 @@ export default new Vuex.Store({
 			context.commit('UPDATE_TASK_STATUS', index, done)
 		},
 		getFirestoreDB (context) {
-			firestore.database.collection('minhas-tarefas').get().then(querySnaphot => {
+			firestore.database.collection('minhas-tarefas').onSnapshot(querySnaphot => {
+				//limpar _task
+				context.commit('CLEAR_TASKS')
 				querySnaphot.forEach( doc => {
 					
 					//monta o objetio
