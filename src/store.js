@@ -45,20 +45,30 @@ export default new Vuex.Store({
           },
           REMOVE_TASK: (state, id) => {
 			//state.tasks.splice(index, 1)
-			firestore.database.collection("minhas-tarefas").doc(id).delete().then(function() {
+			firestore.database.collection("minhas-tarefas").doc(id)
+			.delete()
+			.then(function() {
 				console.log("Document successfully deleted!");
 			}).catch(function(error) {
 				console.error("Error removing document: ", error);
 			});
 		},
-		UPDATE_TASK_STATUS: (stage, payload) => {
-			stage.tasks[payload.index].isDone = payload.checkBox
+		UPDATE_TASK_STATUS: (stage, task) => {
+			firestore.database.collection("minhas-tarefas").doc(task.id)
+			.set({ isDone: task.isDone }, {merge: true})
+			.then(function() {
+				console.log(task.id);
+				
+				if ( task.isDone ) console.log("Tarefa concluida")
+				else console.log("tarefa desconcluida")
+			}).catch(function(error) {
+				console.error("Erro ao concluir tarefa", error);
+			});
 		},
 		UPDATE_TASK_TEXT: (stage, task) => {
-			firestore.database.collection('minhas-tarefas').doc(task.id).set({
-				text: task.text
-			}, {merge: true})
-			.then( () => {
+			firestore.database.collection('minhas-tarefas').doc(task.id)
+			.set({ text: task.text }, {merge: true})
+			.then(() => {
 				console.log(task.id, 'editado')
 			})
 			.catch( error => {
@@ -73,9 +83,9 @@ export default new Vuex.Store({
 		removeTask: (context, index) => {
 			context.commit('REMOVE_TASK', index)
 		},
-		updateStatus: (context, index, done) => {
+		uptadeStatus: (context, task) => {
 			//console.log('updateStatus - index: ', index, 'done: ', done);
-			context.commit('UPDATE_TASK_STATUS', index, done)
+			context.commit('UPDATE_TASK_STATUS', task)
 		},
 		getFirestoreDB (context) {
 			firestore.database.collection('minhas-tarefas').onSnapshot(querySnaphot => {

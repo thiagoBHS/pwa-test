@@ -3,7 +3,7 @@
 		<div class="row justify-content-center align-items-center">
 			<div class="col-auto">
 				<label :for="'task-' + index" class="checkbox__label"></label>
-				<input class="d-none" type="checkbox" :id="'task-' + index" v-model="task.isDone">
+				<input class="d-none" type="checkbox" :id="'task-' + index" v-model="task.isDone" @change="checkChange(task)">
 			</div>
 			<div class="col">
 				<input type="text" v-model="task.text" @change="taxtChange(task)">
@@ -38,6 +38,9 @@
 			taxtChange (objNewText) {
 				//console.log(newtext);
 				this.$store.dispatch('uptadeText',objNewText)
+			},
+			checkChange (task) {				
+				this.$store.dispatch('uptadeStatus', task)
 			}
 		}
 	}
