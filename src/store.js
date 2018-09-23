@@ -9,7 +9,7 @@ Vue.use(firestore)
 //export const new Vuex.Store({
 export default new Vuex.Store({
      state: {
-		//_isTrue: true,
+		_lists: [],
 		_tasks: []
      },
      getters: {
@@ -20,10 +20,16 @@ export default new Vuex.Store({
 		tasks: state => {
 			//pegar as tarefas do state
 			return state._tasks
+		},
+		lists: state => {
+			return state._lists
 		}
      },
      mutations: {
 		//firestore
+		SET_LISTS: (state, data) => {
+			state._lists.push(data)
+		},
 		CLEAR_TASKS: (state) => {
 			state._tasks = []
 		},
@@ -87,7 +93,22 @@ export default new Vuex.Store({
 			//console.log('updateStatus - index: ', index, 'done: ', done);
 			context.commit('UPDATE_TASK_STATUS', task)
 		},
+		createList: (context, list) => {
+			firestore.database.collection(list.name).doc('settings').add({
+				name: list.name,
+				color:list.color
+			})
+			.then( () => {
+				console.log('lista criada com sucesso');
+				//push to list
+			}).catch( (error) => {
+				console.log('occoreu um erro ', error);
+				
+			} )
+		},
 		getFirestoreDB (context) {
+
+			console.log(firestore.database)
 			firestore.database.collection('minhas-tarefas').onSnapshot(querySnaphot => {
 				//limpar _task
 				context.commit('CLEAR_TASKS')
@@ -102,6 +123,21 @@ export default new Vuex.Store({
 					
 					//chama a Mutation para adicionar o Data
 					context.commit('SET_TASKS', data)
+				})
+			})
+		},
+		getAllList: (context) => {
+			firestore.database.collection('listas').onSnapshot(querySnaphot => {
+				//context.commit('CLEAR_ALL_TASK')
+				querySnaphot.forEach( doc => {
+					
+					const data = {
+						'id': doc.id,
+						'name': doc.data().name,
+						'color': doc.data().color
+					}
+					
+					context.commit('SET_LISTS', data)
 				})
 			})
 		}
