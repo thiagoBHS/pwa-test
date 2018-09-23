@@ -6,7 +6,7 @@
 				<input class="d-none" type="checkbox" :id="'task-' + index" v-model="task.isDone">
 			</div>
 			<div class="col">
-				<input type="text" v-model="task.text">
+				<input type="text" v-model="task.text" @change="taxtChange(task)">
 			</div>
 			<div class="col-auto">
 				<button @click="removeTasks(task.id)" class="remove__task__btn">
@@ -35,6 +35,10 @@
 			removeTasks (id) {
 				this.$store.dispatch('removeTask',id)
 			},
+			taxtChange (objNewText) {
+				//console.log(newtext);
+				this.$store.dispatch('uptadeText',objNewText)
+			}
 		}
 	}
 </script>

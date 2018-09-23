@@ -27,7 +27,7 @@ export default new Vuex.Store({
 		CLEAR_TASKS: (state) => {
 			state._tasks = []
 		},
-		GET_TASKS: (state, data) => {
+		SET_TASKS: (state, data) => {
 			state._tasks.push(data)
 		},
 		//links
@@ -53,10 +53,23 @@ export default new Vuex.Store({
 		},
 		UPDATE_TASK_STATUS: (stage, payload) => {
 			stage.tasks[payload.index].isDone = payload.checkBox
+		},
+		UPDATE_TASK_TEXT: (stage, task) => {
+			firestore.database.collection('minhas-tarefas').doc(task.id).set({
+				text: task.text
+			}, {merge: true})
+			.then( () => {
+				console.log(task.id, 'editado')
+			})
+			.catch( error => {
+				console.error("Error editing document: ", error);
+			} )
 		}
      },
      actions: {
-		//links
+		uptadeText: (context, task) => {
+			context.commit('UPDATE_TASK_TEXT', task)
+		},
 		removeTask: (context, index) => {
 			context.commit('REMOVE_TASK', index)
 		},
@@ -78,7 +91,7 @@ export default new Vuex.Store({
 					}
 					
 					//chama a Mutation para adicionar o Data
-					context.commit('GET_TASKS', data)
+					context.commit('SET_TASKS', data)
 				})
 			})
 		}
