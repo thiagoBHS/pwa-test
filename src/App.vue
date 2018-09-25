@@ -11,6 +11,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  background: #f6f5ee
+  background: #e4e2d2;
+  padding-bottom: 27px;
 }
 </style>

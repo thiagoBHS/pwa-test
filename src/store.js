@@ -31,8 +31,8 @@ export default new Vuex.Store({
 		},
 		listsInfo: state => {
 			return state._listinfo
-		}
-     },
+		},
+	},
      mutations: {
 		//firestore
 		SET_LISTS: (state, data) => {
@@ -42,14 +42,16 @@ export default new Vuex.Store({
 			state._lists = []
 		},
 		CLEAR_TASKS: (state) => {
+			console.log('clear');
+			
 			state._tasks = []
 		},
 		SET_TASKS: (state, data) => {
 			state._tasks.push(data)
 		},
           ADD_TASK: (state,task) => {
-			firestore.database.collection("minhas-tarefas").add({
-				text: task,
+			firestore.database.collection("listas").doc(task.listId).collection('tarefas').add({
+				text: task.taskText,
 				isDone: false
 			})
 			.then(function(docRef) {
@@ -72,7 +74,7 @@ export default new Vuex.Store({
 		UPDATE_TASK_STATUS: (stage, task) => {
 			firestore.database.collection("minhas-tarefas").doc(task.id)
 			.set({ isDone: task.isDone }, {merge: true})
-			.then(function() {
+				.then(function() {
 				console.log(task.id);
 				
 				if ( task.isDone ) console.log("Tarefa concluida")
@@ -161,7 +163,14 @@ export default new Vuex.Store({
 			
 			list.get().then( doc => {
 				if (doc.exists) {
-					context.commit('SET_LIST_INFO', doc.data())
+					
+					const listInfo = {
+						id: doc.id,
+						color: doc.data().color,
+						name: doc.data().name
+					}
+
+					context.commit('SET_LIST_INFO', listInfo)
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");
@@ -174,10 +183,21 @@ export default new Vuex.Store({
 			//..
 			const list = firestore.database.collection('listas').doc(listId)
 			
+			//context.commit('CLEAR_TASKS')
+
 			context.dispatch('setListData', list)
 			
 			context.dispatch('setTasks', list)
 
+		},
+		addTaskToList: (context, task) => {
+
+			const listId = context.state._listinfo.id
+				// list = firestore.database.collection('listas').doc(listId)
+			
+			context.commit('ADD_TASK', {
+				listId, taskText: task})
+			
 		}
      }
 })

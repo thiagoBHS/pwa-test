@@ -47,7 +47,7 @@
 				this.$store.dispatch('toogle')
 			},
 			addTask () {
-				this.$store.commit('ADD_TASK', this.newTask )
+				this.$store.dispatch('addTaskToList', this.newTask )
 				this.newTask = ''
 			}
 		},
