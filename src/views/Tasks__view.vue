@@ -1,18 +1,17 @@
 <template>
      <div>
-          <list-header/>
+          <list-header :title="this.$route.params.tasks"/>
           <div class="container">
+
+			<form @submit.prevent="addTask" class="list__item--wrapper">
+                    <input type="text" placeholder="adicionar tarefa" v-model="newTask">
+               </form>
+
                 <ul class="list--wrapper">
 				<li v-for="(task, index) in tasks" :key="task.index">
-					<!-- <list-item :taskText="task.taskText" :modelo="task.index" :taskIndex="index"/> -->
 					<list-item :task="task" :index="index"/>
 				</li>
                 </ul>
-               <form @submit.prevent="addTask" class="list__item--wrapper">
-                    <input type="text" placeholder="adicionar tarefa" v-model="newTask">
-               </form>
-			<button @click="toogleMe">toogle me</button>
-               <p class="task__counter" v-if="isTrue">existe {{ countTasks }} tarefas</p>
           </div>
      </div>
 </template>
@@ -53,7 +52,8 @@
 			}
 		},
 		created () {
-			this.$store.dispatch('getFirestoreDB')
+			//this.$store.dispatch('getTasks',this.$route.params.tasks)
+			this.$store.dispatch('setListView',this.$route.params.tasks)
 		}
      }
 </script>
@@ -61,14 +61,7 @@
 <style scoped>
 	.list--wrapper {
 		list-style: none;
+		padding: 36px 0;
 	}
-     .add__task {
-          background: none;
-          border: none;
-          display: inline;
-     }
-     .task__counter {
-          margin-top: 50px;
-     }
 </style>
 

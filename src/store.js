@@ -10,7 +10,9 @@ Vue.use(firestore)
 export default new Vuex.Store({
      state: {
 		_lists: [],
-		_tasks: []
+		_tasks: [],
+		_listinfo: {},
+		_isLoadingActive: false
      },
      getters: {
 		//links
@@ -23,6 +25,12 @@ export default new Vuex.Store({
 		},
 		lists: state => {
 			return state._lists
+		},
+		getLoadingState: state => {
+			return state._isLoadingActive
+		},
+		listsInfo: state => {
+			return state._listinfo
 		}
      },
      mutations: {
@@ -30,13 +38,15 @@ export default new Vuex.Store({
 		SET_LISTS: (state, data) => {
 			state._lists.push(data)
 		},
+		CLEAR_ALL_LISTS: (state) => {
+			state._lists = []
+		},
 		CLEAR_TASKS: (state) => {
 			state._tasks = []
 		},
 		SET_TASKS: (state, data) => {
 			state._tasks.push(data)
 		},
-		//links
           ADD_TASK: (state,task) => {
 			firestore.database.collection("minhas-tarefas").add({
 				text: task,
@@ -80,6 +90,12 @@ export default new Vuex.Store({
 			.catch( error => {
 				console.error("Error editing document: ", error);
 			} )
+		},
+		SET_LOADING: (stage, bool) => {
+			stage._isLoadingActive = bool
+		},
+		SET_LIST_INFO: (state, data) => {
+			state._listinfo = data
 		}
      },
      actions: {
@@ -106,12 +122,14 @@ export default new Vuex.Store({
 				
 			} )
 		},
-		getFirestoreDB (context) {
+		setTasks: (context, doc) => {
 
-			console.log(firestore.database)
-			firestore.database.collection('minhas-tarefas').onSnapshot(querySnaphot => {
-				//limpar _task
-				context.commit('CLEAR_TASKS')
+			context.commit('CLEAR_TASKS')
+
+			const db = doc.collection('tarefas')
+
+			db.onSnapshot(querySnaphot => {
+	
 				querySnaphot.forEach( doc => {
 					
 					//monta o objetio
@@ -120,15 +138,13 @@ export default new Vuex.Store({
 						'text': doc.data().text,
 						'isDone': doc.data().isDone
 					}
-					
-					//chama a Mutation para adicionar o Data
 					context.commit('SET_TASKS', data)
 				})
 			})
 		},
 		getAllList: (context) => {
 			firestore.database.collection('listas').onSnapshot(querySnaphot => {
-				//context.commit('CLEAR_ALL_TASK')
+				context.commit('CLEAR_ALL_LISTS')
 				querySnaphot.forEach( doc => {
 					
 					const data = {
@@ -140,6 +156,28 @@ export default new Vuex.Store({
 					context.commit('SET_LISTS', data)
 				})
 			})
+		},
+		setListData: (context, list) => {
+			
+			list.get().then( doc => {
+				if (doc.exists) {
+					context.commit('SET_LIST_INFO', doc.data())
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+			}).catch(function(error) {
+				console.log("Error getting document:", error);
+			});
+		},
+		setListView: (context, listId) => {
+			//..
+			const list = firestore.database.collection('listas').doc(listId)
+			
+			context.dispatch('setListData', list)
+			
+			context.dispatch('setTasks', list)
+
 		}
      }
 })

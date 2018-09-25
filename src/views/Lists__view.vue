@@ -1,11 +1,22 @@
 <template>
-     <div>
-          <ul>
-               <li v-for="list in lists" :key="list.id">
-                    {{ list.name }}
-               </li>
-          </ul>
+     <div class="container">
+          <div class="row justify-content-center">
+               <div class="col-10">
+                    <h1>Listas</h1>
+               </div>
+          </div>
+          <div class="list--wrapper" v-for="list in lists" :key="list.id">
+               <div class="row justify-content-center">
+                    <div class="col">
+                         {{ list.name }}
+                    </div>
+                    <div class="col-auto">
+                         <router-link :to="'/' + list.id">ver lista</router-link>
+                    </div>
+               </div>
+          </div>
      </div>
+     
 </template>
 
 <script>
@@ -23,7 +34,10 @@ export default {
 </script>
 
 <style scoped>
-     div {
-          padding: 30px 60px;
-     }
+     .list--wrapper {
+          background: #fff;
+          padding: 30px;
+          border-radius: 4px;
+          margin: 18px 0;
+     }     
 </style>

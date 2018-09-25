@@ -12,7 +12,7 @@ export default new Router({
       name: 'listas',
       component: Listas
     },{
-      path: '/tarefas',
+      path: '/:tasks',
       name: 'tarefas',
       component: Tarefas
     },

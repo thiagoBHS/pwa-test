@@ -1,12 +1,14 @@
 <template>
      <div class="list__header">
-          <h1>Minhas Tarefas</h1>
+          <router-link to="/">voltar</router-link>
+          <h1>{{title}}</h1>
      </div>
 </template>
      
 <script>
 export default {
      name: 'ListaHeader',
+     props: ['title']
 }
 </script>
 
