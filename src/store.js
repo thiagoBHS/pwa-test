@@ -42,9 +42,11 @@ export default new Vuex.Store({
 			state._lists = []
 		},
 		CLEAR_TASKS: (state) => {
+			console.log(state._tasks);
 			console.log('clear');
 			
 			state._tasks = []
+			console.log(state._tasks);
 		},
 		SET_TASKS: (state, data) => {
 			state._tasks.push(data)
@@ -62,14 +64,17 @@ export default new Vuex.Store({
 			});
           },
           REMOVE_TASK: (state, id) => {
-			//state.tasks.splice(index, 1)
-			firestore.database.collection("minhas-tarefas").doc(id)
+			const list = state._listinfo
+			console.log(list);
+			
+			firestore.database.collection("listas").doc(list.id).collection('tarefas').doc(id)
 			.delete()
 			.then(function() {
 				console.log("Document successfully deleted!");
 			}).catch(function(error) {
 				console.error("Error removing document: ", error);
 			});
+
 		},
 		UPDATE_TASK_STATUS: (stage, task) => {
 			firestore.database.collection("minhas-tarefas").doc(task.id)
@@ -108,7 +113,6 @@ export default new Vuex.Store({
 			context.commit('REMOVE_TASK', index)
 		},
 		uptadeStatus: (context, task) => {
-			//console.log('updateStatus - index: ', index, 'done: ', done);
 			context.commit('UPDATE_TASK_STATUS', task)
 		},
 		createList: (context, list) => {
@@ -124,26 +128,6 @@ export default new Vuex.Store({
 				
 			} )
 		},
-		setTasks: (context, doc) => {
-
-			context.commit('CLEAR_TASKS')
-
-			const db = doc.collection('tarefas')
-
-			db.onSnapshot(querySnaphot => {
-	
-				querySnaphot.forEach( doc => {
-					
-					//monta o objetio
-					const data = {
-						'id': doc.id,
-						'text': doc.data().text,
-						'isDone': doc.data().isDone
-					}
-					context.commit('SET_TASKS', data)
-				})
-			})
-		},
 		getAllList: (context) => {
 			firestore.database.collection('listas').onSnapshot(querySnaphot => {
 				context.commit('CLEAR_ALL_LISTS')
@@ -156,6 +140,26 @@ export default new Vuex.Store({
 					}
 					
 					context.commit('SET_LISTS', data)
+				})
+			})
+		},
+		setTasks: (context, doc) => {
+
+			const db = doc.collection('tarefas')
+
+			db.onSnapshot(querySnaphot => {
+
+				context.commit('CLEAR_TASKS')
+				
+				querySnaphot.forEach( doc => {
+					
+					//monta o objetio
+					const data = {
+						'id': doc.id,
+						'text': doc.data().text,
+						'isDone': doc.data().isDone
+					}
+					context.commit('SET_TASKS', data)
 				})
 			})
 		},
@@ -182,8 +186,6 @@ export default new Vuex.Store({
 		setListView: (context, listId) => {
 			//..
 			const list = firestore.database.collection('listas').doc(listId)
-			
-			//context.commit('CLEAR_TASKS')
 
 			context.dispatch('setListData', list)
 			
