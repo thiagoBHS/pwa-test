@@ -20,7 +20,6 @@ export default new Vuex.Store({
                return state._tasks.length
 		},
 		tasks: state => {
-			//pegar as tarefas do state
 			return state._tasks
 		},
 		lists: state => {
@@ -29,7 +28,7 @@ export default new Vuex.Store({
 		getLoadingState: state => {
 			return state._isLoadingActive
 		},
-		listsInfo: state => {
+		listInfo: state => {
 			return state._listinfo
 		},
 	},

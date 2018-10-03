@@ -1,6 +1,6 @@
 <template>
      <div>
-          <list-header :title="this.$route.params.tasks"/>
+          <list-header :title="getListName"/>
           <div class="container">
 
 			<form @submit.prevent="addTask" class="list__item--wrapper">
@@ -40,6 +40,10 @@
 			},
 			tasks () {
 				return this.$store.getters.tasks
+			},
+			getListName () {
+				const listInfo = this.$store.getters.listInfo
+				return listInfo.name
 			}
 		},
 		methods: {
