@@ -1,5 +1,6 @@
 <template>
      <div class="container">
+          <router-link to="/black_friday">black Friday</router-link>
           <div class="row justify-content-center">
                <div class="col-10">
                     <h1>Listas</h1>
