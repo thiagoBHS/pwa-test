@@ -1,18 +1,34 @@
 <template>
      <div class="card_produto--wrapper">
-          <div class="row">
-               <div class="col-5">
+          
+          <div class="row no-gutters">
+               <div class="col-5 col-md-12">
+
+                    <div class="card_produto--tags">
+                         <div class="row no-gutters justify-content-between">
+                              <div class="col-auto">
+                                   <div class="card_produto--disconto">{{ getPercentage }}%</div>
+                              </div>
+                              <div class="col-auto">
+                                   <div class="card_produto--disconto">3 und</div>
+                              </div>
+                              <!-- <div class="col-auto">{{ getStorage }}%</div> -->
+                         </div>
+                    </div>
+
                     <img class="card_produto--image" :src="produto.img" alt="imagem de produto">
                </div>
-               <div class="col">
-                    <p class="card_produto--nome">{{produto.nome}}</p>
-                    <span class="card_produto--stars">
-                         <i v-for="star in getStars" :key="star.id" :class="star"></i>
-                         <span> {{ produto.star.avaliation }}</span>
-                    </span>
-                    <p class="card_produto--preço card_produto--preço--de">R$ {{produto.preço.de}}</p>
-                    <p class="card_produto--preço card_produto--preço--por">R$ {{produto.preço.por}}</p>
-                    <button class="card_produto--btn_comprar">Adicionar ao Carrinho</button>
+               <div class="col col-md-12">
+                    <div class="card_produto--direito">
+                         <p class="card_produto--nome">{{produto.nome}}</p>
+                         <span class="card_produto--stars">
+                              <i v-for="star in getStars" :key="star.id" :class="star"></i>
+                              <span> {{ produto.star.avaliation }}</span>
+                         </span>
+                         <p class="card_produto--preço card_produto--preço--de">R$ {{produto.preco.de}}</p>
+                         <p class="card_produto--preço card_produto--preço--por">R$ {{produto.preco.por}}</p>
+                         <button class="card_produto--btn_comprar">Adicionar ao Carrinho</button>
+                    </div>
                </div>
           </div>
 
@@ -39,6 +55,10 @@ export default {
                for (let i = (5 - rating); i >= 1; i--) output.push('far fa-star')
 
                return output
+          },
+          getPercentage() {
+               let desconto =  this.produto.preco.por / this.produto.preco.de   * 100
+               return desconto.toFixed(0)
           }
      }
 }
@@ -47,6 +67,23 @@ export default {
 <style>
      .card_produto--wrapper {
           padding: 5px;
+          margin: 9px 0;
+
+     }
+     .card_produto--wrapper .card_produto--direito {
+          padding-left: 18px;
+     }
+     .card_produto--wrapper .card_produto--tags {
+          margin: 6px 0 -6px;
+     }
+     .card_produto--wrapper .card_produto--disconto {
+          background: #000;
+          line-height: 18px;
+          color: #fff;
+          padding: 3px 6px;
+          margin-bottom: -29px;
+          position: relative;
+          z-index: 1;
      }
      .card_produto--wrapper .card_produto--image {
           width: 100%;
@@ -54,6 +91,7 @@ export default {
      }
      .card_produto--wrapper .card_produto--nome {
           margin-bottom: 3px;
+          line-height: 16px;
      }
      .card_produto--wrapper .card_produto--stars {
           font-size: 11px;
@@ -73,6 +111,20 @@ export default {
           padding: 9px;
           width: 100%;
           border-radius: 3px;
+     }
+     /* Medium devices (tablets, 768px and up) */
+     @media (min-width: 768px) { 
+          .card_produto--wrapper {
+               cursor: pointer;
+          }
+          .card_produto--wrapper .card_produto--btn_comprar {
+               opacity: 0;
+               transition: opacity .3s;
+               
+          }
+          .card_produto--wrapper:hover .card_produto--btn_comprar{
+               opacity: 1;
+          }
      }
 
 </style>
