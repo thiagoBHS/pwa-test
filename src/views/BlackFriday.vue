@@ -20,6 +20,25 @@
                </div>
           </div>
           <expasao-produto :produto="produto"/>
+          <div class="container">
+               <div class="row">
+                    <div class="col-12 col-md">
+                         <card-produto :produto="produto"></card-produto>
+                    </div>
+                    <div class="col-12 col-md">
+                         <card-produto :produto="produto"></card-produto>
+                    </div>
+                    <div class="col-12 col-md">
+                         <card-produto :produto="produto"></card-produto>
+                    </div>
+                    <div class="col-12 col-md">
+                         <card-produto :produto="produto"></card-produto>
+                    </div>
+                    <div class="col-12 col-md">
+                         <card-produto :produto="produto"></card-produto>
+                    </div>
+               </div>
+          </div>
      </div>
 </template>
 
@@ -33,6 +52,7 @@ export default {
      data() {
           return {
                produto: {
+                    codigo: 'ps9900Y',
                     nome: 'garrafa harry potter pomo de ouro',
                     preco: {
                          de: 9999.99,
